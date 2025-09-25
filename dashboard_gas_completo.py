@@ -5,22 +5,68 @@ from dash import Dash, dcc, html, Output, Input
 import dash_bootstrap_components as dbc
 from datetime import datetime
 
-# Configuración de datos
-ruta_excel = r'D:\Analisis producción de gas 2025\Bases_produccion_gas\produccion_gas_resumenes.xlsx'
-ruta_serie_tiempo = r'D:\Analisis producción de gas 2025\Bases_produccion_gas\serie_tiempo_gas.xlsx'
+# Configuración de datos - DEMO VERSION
+# Para despliegue público, usando datos de ejemplo generados
 
-# Cargar datos
-df_anual = pd.read_excel(ruta_excel, sheet_name='Totales_Anuales')
-df_anual.columns = df_anual.columns.str.strip()
+def crear_datos_ejemplo():
+    """Crear datos de ejemplo para el dashboard demo"""
+    import numpy as np
+    
+    # Datos anuales totales
+    years = list(range(2015, 2025))
+    base_production = 1000000
+    
+    df_anual = pd.DataFrame({
+        'AÑO': years,
+        'PRODUCCION FISCALIZADA': [
+            base_production + np.random.normal(0, 100000) + (year-2015)*50000 
+            for year in years
+        ]
+    })
+    
+    # Datos por cuenca
+    cuencas = ['LLANOS ORIENTALES', 'VALLE MEDIO DEL MAGDALENA', 'VALLE SUPERIOR DEL MAGDALENA', 'CATATUMBO']
+    df_cuenca_data = []
+    for year in years:
+        for i, cuenca in enumerate(cuencas):
+            produccion = (base_production * (0.4 - i*0.1)) + np.random.normal(0, 50000)
+            df_cuenca_data.append({
+                'AÑO': year,
+                'CUENCA': cuenca,
+                'PRODUCCION FISCALIZADA': max(produccion, 10000)
+            })
+    df_cuenca = pd.DataFrame(df_cuenca_data)
+    
+    # Datos por campo
+    campos = ['CUSIANA', 'CUPIAGUA', 'PAUTO', 'VOLCANERA', 'RECETOR', 'GIBRALTAR', 'CHICHIMENE', 'CASTILLA']
+    df_campo_data = []
+    for year in years:
+        for i, campo in enumerate(campos):
+            produccion = (base_production * (0.25 - i*0.03)) + np.random.normal(0, 30000)
+            df_campo_data.append({
+                'AÑO': year,
+                'CAMPO_LIMPIO': campo,
+                'PRODUCCION FISCALIZADA': max(produccion, 5000)
+            })
+    df_campo = pd.DataFrame(df_campo_data)
+    
+    # Datos por departamento
+    departamentos = ['META', 'CASANARE', 'SANTANDER', 'BOYACA', 'ARAUCA', 'HUILA', 'TOLIMA']
+    df_dept_data = []
+    for year in years:
+        for i, dept in enumerate(departamentos):
+            produccion = (base_production * (0.35 - i*0.05)) + np.random.normal(0, 40000)
+            df_dept_data.append({
+                'AÑO': year,
+                'DEPARTAMENTO': dept,
+                'PRODUCCION FISCALIZADA': max(produccion, 8000)
+            })
+    df_departamento = pd.DataFrame(df_dept_data)
+    
+    return df_anual, df_cuenca, df_campo, df_departamento
 
-df_cuenca = pd.read_excel(ruta_excel, sheet_name='Anual_Por_Cuenca')
-df_cuenca.columns = df_cuenca.columns.str.strip()
-
-df_campo = pd.read_excel(ruta_excel, sheet_name='Anual_Por_Campo')
-df_campo.columns = df_campo.columns.str.strip()
-
-df_departamento = pd.read_excel(ruta_excel, sheet_name='Sumatoria_Anual_Producción_Gas')
-df_departamento.columns = df_departamento.columns.str.strip()
+# Cargar datos de ejemplo
+df_anual, df_cuenca, df_campo, df_departamento = crear_datos_ejemplo()
 
 # Limpiar datos
 df_anual = df_anual.dropna(subset=['PRODUCCION FISCALIZADA'])
@@ -62,7 +108,9 @@ app.layout = dbc.Container([
                     html.H1("KuenKa", 
                            style={'color': color_primario, 'fontWeight': 'bold', 'fontSize': '42px', 'marginBottom': '0'}),
                     html.H3("Gas Production Executive Dashboard", 
-                           style={'color': color_texto, 'fontWeight': '300', 'fontSize': '24px', 'marginTop': '0'})
+                           style={'color': color_texto, 'fontWeight': '300', 'fontSize': '24px', 'marginTop': '0'}),
+                    html.P("🔬 Demo Version - Sample Data", 
+                           style={'color': color_secundario, 'fontWeight': '500', 'fontSize': '14px', 'marginTop': '10px', 'fontStyle': 'italic'})
                 ], className="text-center")
             ], style={
                 'background': f'linear-gradient(135deg, {color_fondo} 0%, #ffffff 100%)',
