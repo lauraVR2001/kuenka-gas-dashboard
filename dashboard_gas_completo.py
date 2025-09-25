@@ -101,8 +101,8 @@ app.layout = dbc.Container([
                            style={'color': color_primario, 'fontWeight': 'bold', 'fontSize': '42px', 'marginBottom': '0'}),
                     html.H3("Gas Production Executive Dashboard", 
                            style={'color': color_texto, 'fontWeight': '300', 'fontSize': '24px', 'marginTop': '0'}),
-                    html.P("🔬 Demo Version - Sample Data", 
-                           style={'color': color_secundario, 'fontWeight': '500', 'fontSize': '14px', 'marginTop': '10px', 'fontStyle': 'italic'})
+                    html.P("� Real Production Data Analysis 2013-2024", 
+                           style={'color': color_primario, 'fontWeight': '500', 'fontSize': '14px', 'marginTop': '10px', 'fontStyle': 'italic'})
                 ], className="text-center")
             ], style={
                 'background': f'linear-gradient(135deg, {color_fondo} 0%, #ffffff 100%)',
