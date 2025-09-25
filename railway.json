@@ -1,0 +1,13 @@
+{
+  "build": {
+    "commands": [
+      "pip install -r requirements.txt"
+    ]
+  },
+  "start": {
+    "command": "python dashboard_gas_completo.py"
+  },
+  "env": {
+    "PORT": "8052"
+  }
+}
