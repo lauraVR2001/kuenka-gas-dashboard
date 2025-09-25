@@ -106,12 +106,16 @@ venv.bak/
 dmypy.json
 
 # Archivos específicos del proyecto
-*.xlsx
-*.xls
+# *.xlsx  # Comentado para permitir archivos Excel del análisis
+# *.xls   # Comentado para permitir archivos Excel del análisis
 *.csv
 datos/
 data/
 archivos_excel/
+
+# Permitir archivos específicos del análisis
+!produccion_gas_resumenes.xlsx
+!serie_tiempo_gas.xlsx
 
 # Archivos de configuración local
 config_local.py
