@@ -97,12 +97,11 @@ app.layout = dbc.Container([
         dbc.Col([
             html.Div([
                 html.Div([
-                    html.H1("KuenKa", 
+                    html.H1("KuenKa Energy Research", 
                            style={'color': color_primario, 'fontWeight': 'bold', 'fontSize': '42px', 'marginBottom': '0'}),
                     html.H3("Gas Production Executive Dashboard", 
                            style={'color': color_texto, 'fontWeight': '300', 'fontSize': '24px', 'marginTop': '0'}),
-                    html.P("� Real Production Data Analysis 2013-2024", 
-                           style={'color': color_primario, 'fontWeight': '500', 'fontSize': '14px', 'marginTop': '10px', 'fontStyle': 'italic'})
+
                 ], className="text-center")
             ], style={
                 'background': f'linear-gradient(135deg, {color_fondo} 0%, #ffffff 100%)',
@@ -401,9 +400,15 @@ def crear_tab_campo(df_filtered):
     # Campos que representan el 70% de la producción
     campos_70_pct = campos_totales[campos_totales['PORCENTAJE_ACUM'] <= 70]['CAMPO_LIMPIO'].tolist()
     
-    # Si no hay suficientes campos para llegar al 70%, tomar al menos los primeros 5
-    if len(campos_70_pct) < 3:
-        campos_70_pct = campos_totales.head(5)['CAMPO_LIMPIO'].tolist()
+    # Complementar con campos adicionales hasta completar 10
+    if len(campos_70_pct) < 10:
+        # Agregar campos faltantes para llegar a 10
+        campos_faltantes = 10 - len(campos_70_pct)
+        campos_adicionales = campos_totales.head(len(campos_70_pct) + campos_faltantes)['CAMPO_LIMPIO'].tolist()
+        # Tomar los campos que no están ya incluidos
+        for campo in campos_adicionales:
+            if campo not in campos_70_pct and len(campos_70_pct) < 10:
+                campos_70_pct.append(campo)
     
     # Serie de tiempo por campo (top 5)
     top_5_campos = top_campos.head(5)['CAMPO_LIMPIO'].tolist()
